@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="nav">
+    <h2 style="margin-left: 15px;">Canteen Food Ordering System</h2>
+    <div class="nav-links">
+        <a href="homepage.html">Home</a>
+        <a href="orders.html">Your Orders</a>
+        <a href="profile.html">Profile</a>
+        <a href="web.html">Login</a>
+    </div>
+</div>
+
+<div class="left-box">
+    <h2 id="typing"></h2>
+    
+</div>
+
+
+<div class="shop-container">
+
+    
+    <div class="shop">
+        <p>Maruti</p>
+        <a href="maruti.html">
+            <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d" width="200">
+            </a>
+             </div>
+              <div class="shop">
+            <p>Nescafe</p>
+              <a href="nescafe.html">
+            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93" width="200" height="190">
+            
+        </a>
+       </div>
+   
+
+   
+    
+
+</div>
+<script>
+let text = "Canteen Shops";
+let i = 0;
+
+function typingEffect() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typingEffect, 100);
+    }
+}
+
+typingEffect();
+</script>
+
+</body>
+</html>
