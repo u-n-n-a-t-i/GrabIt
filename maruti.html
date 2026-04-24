@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maruti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Maruti</h2><br>
+    <h2>Menu</h2>
+    <div class="navbar-links">
+        <a href="homepage.html">Home</a>
+        <a href="orders.html">Your Orders</a>
+        <a href="profile.html">Profile</a>
+    </div>
+    
+</div>
+
+
+
+<div class="menu">
+
+    <div class="item">
+        <img src="https://www.funfoodfrolic.com/wp-content/uploads/2013/11/Chinese-Bhel-5-585x847.jpg" width="200">
+       <label>
+        <input type="checkbox" name="Chinese Bhel" class="order-item" value="60">
+        Chinese Bhel Half - ₹60
+    </label>
+
+    <label>
+        <input type="checkbox" name="Chinese Bhel" class="order-item" value="90">
+        Chinese Bhel Full - ₹90
+    </label>
+    </div>
+
+    <div class="item">
+        <img src="https://i.pinimg.com/originals/d2/26/09/d22609efc42984ac31068cafc8f9427b.jpg" width="150">
+          <label>
+        <input type="checkbox" name="manchurian" class="order-item" value="60">
+        Manchurain Half - ₹60
+    </label>
+
+    <label>
+        <input type="checkbox" name="manchurian" class="order-item" value="90">
+        Manchurain Full - ₹90
+    </label>
+    </div>
+
+    <div class="item" >
+        <img src="https://tse2.mm.bing.net/th/id/OIP.PPl1BWA--IUK_1NfC2f5hwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" width="150"height="200">
+         <label>
+            <input  type="checkbox"class="order-item" value="30">
+        Puff - ₹30
+        
+    </label> 
+    </div>
+     <div class="item">
+        <img src="https://img.freepik.com/premium-photo/dahi-bhel-puri-famous-midday-snack-india-served-rustic-wooden-background-selective-focus_726363-774.jpg?w=1380" width="150" height="200">
+        <label>
+        <input type="checkbox" name="dahibhel" class="order-item" value="60">
+        Dahi Bhel Half - ₹60
+    </label>
+
+    <label>
+        <input type="checkbox" name="dahibhel" class="order-item" value="90">
+        Dahi Bhel Full - ₹90
+    </label>
+    </div>
+     <div class="item">
+        <img src="https://1.bp.blogspot.com/-JyyvyY40SNI/Wldv7Yv-TeI/AAAAAAAAe98/Ex3Qtxq9mJYA4TI-2C5EgHfFmMxq1LbdACEwYBhgL/s640/169.jpg" width="250" height="200">
+        <label>
+        <input type="checkbox" name="sevpuri" class="order-item" value="60">
+        Sev Puri Half - ₹60
+    </label>
+
+    <label>
+        <input type="checkbox" name="sevpuri" class="order-item" value="90">
+        Sev Puri Full - ₹90
+    </label>
+    </div>
+
+</div>
+<div class="order-box">
+    <h3 id="total">Total: ₹0</h3>
+    <button onclick="placeOrder()">Place Order</button>
+</div>
+<script>
+
+
+let checkboxes = document.querySelectorAll(".order-item");
+
+checkboxes.forEach(cb => {
+    cb.addEventListener("change", updateTotal);
+});
+
+function updateTotal(){
+    let total = 0;
+
+    document.querySelectorAll(".order-item:checked").forEach(item => {
+        total += parseInt(item.value);
+    });
+
+    document.getElementById("total").innerText = "Total: ₹" + total;
+}
+
+
+function placeOrder(){
+    let selected = document.querySelectorAll(".order-item:checked");
+
+    if(selected.length === 0){
+        alert("Please select at least one item!");
+        return;
+    }
+     let orders = [];
+
+    selected.forEach(item => {
+          let fullText = item.parentElement.innerText.trim();
+        orders.push({
+            name: fullText,
+            price: item.value,
+            status: "pending",
+            time: 0
+        });
+    });
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    let total = 0;
+
+    selected.forEach(item => {
+        total += parseInt(item.value);
+    });
+
+    alert("Order placed!\nTotal = ₹" + total + "\nPay at counter");
+
+    window.location.href = "orders.html";
+}
+
+</script>
+
+
+</body>
+</html>
