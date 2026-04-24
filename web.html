@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="web.css">
+</head>
+
+<body>
+
+
+<div class="bg-slider">
+    <div class="slide s1"></div>
+    <div class="slide s2"></div>
+    <div class="slide s3"></div>
+</div>
+
+
+<div class="container" >
+    <h2>Login</h2>
+
+    <input type="text" id="username" placeholder="Enter Username"><br>
+
+    <input type="email" id="email"
+       placeholder="College Email" 
+       pattern=".+@svitvasad\.ac\.in" 
+       title="Please enter your college email" 
+       required><br>
+
+    <input type="password" id="password" placeholder="Enter Password"><br>
+
+    <select id="role">
+        <option value="">Select Role</option>
+        <option value="student">Student</option>
+        <option value="admin">Shop Owner</option>
+    </select><br>
+
+    <button onclick="login()">Login</button>
+
+    <p style="font-size:20px; text-decoration:underline;"><a href="register.html">New User? Register</a>
+    </p>
+</div>
+
+<script>
+function login(){
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+   let email = document.getElementById("email").value;
+    let role = document.getElementById("role").value;
+
+
+    if(username === "" || password === "" || role === ""){
+        alert("Please fill all fields!");
+        return;
+    }
+
+      alert(username + " has successfully logged in as " + role);
+      
+    let user = {
+        username: username,
+        email: email,
+        role: role
+    };
+
+    localStorage.setItem("user", JSON.stringify(user));
+    if(role === "student"){
+        window.location.href = "homepage.html";
+    }
+    else if(role === "admin"){
+        window.location.href = "admin.html";
+    }
+   
+   
+}
+</script>
+
+</body>
+</html>
