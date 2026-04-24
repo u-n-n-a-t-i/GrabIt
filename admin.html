@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+     <link rel="stylesheet" href="style.css">
+     <style>
+      .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav a {
+            color: rgb(78, 188, 198);
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+        .orders-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+}
+
+.admin-card {
+    background: rgba(23, 23, 23, 0.3);
+    border-radius: 10px;
+    padding: 12px;
+    margin: 15px auto;
+    width: 40%;
+    color: white;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.typing-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#typing {
+    font-size: 30px;
+    color: rgb(190, 242, 246);
+    letter-spacing: 2px;
+}
+
+
+#typing::after {
+    content: "|";
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+        
+        </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <h2>Admin/Shop Owner Dashboard</h2>
+        <div class = "navbar-links">
+        <a href="web.html">Login</a>
+        <a href="profile.html">Profile</a></div>
+    </div>
+    
+</div>
+<div class="typing-box">
+    <h1 id="typing"></h1>
+</div>
+
+<div id="adminOrders" class ="order-container" ></div>
+
+
+<script>
+let text = "Your Requests";
+let i = 0;
+
+function typeEffect() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeEffect, 100);
+    }
+}
+
+typeEffect();
+let data = JSON.parse(localStorage.getItem("orders")) || [];
+
+function loadAdmin(){
+    let output = "";
+
+    data.forEach((order, index) => {
+
+       output += `
+<div class= "admin-card">
+    <p>${order.name}</p>
+    <p>Status: ${order.status}</p>
+
+    <!-- 🔥 Time selection -->
+    <select id="time${index}">
+        <option value="300">5 min</option>
+        <option value="600">10 min</option>
+        <option value="900">15 min</option>
+        <option value="1200">20 min</option>
+    </select>
+
+    <button onclick="acceptOrder(${index})">Accept</button>
+    <button onclick="readyOrder(${index})">Ready</button>
+</div>
+`;
+    });
+
+    document.getElementById("adminOrders").innerHTML = output;
+}
+
+function acceptOrder(i){
+     let selectedTime = document.getElementById("time"+i).value;
+    data[i].status = "accepted";
+    data[i].time = Date.now(); 
+     data[i].duration = parseInt(selectedTime);
+    localStorage.setItem("orders", JSON.stringify(data));
+    loadAdmin();
+}
+
+function readyOrder(i){
+    data[i].status = "ready";
+    localStorage.setItem("orders", JSON.stringify(data));
+    loadAdmin();
+}
+
+loadAdmin();
+
+</script>
+
+</body>
+</html>
