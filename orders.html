@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Your Orders</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav a {
+            color: rgb(78, 188, 198);
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .left-panel {
+            position: fixed;
+            top: 200px;
+            left: 0;
+            width: 300px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 0 15px 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .orders-container {
+            margin-left: 240px;
+            margin-top: 50px;
+        }
+
+        .order-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 25px auto;
+            width: 30%;
+            font-size: 15px;
+            color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <h2>Your Orders</h2>
+        <div>
+            <a href="homepage.html">Home</a>
+            <a href="profile.html">Profile</a>
+            <a href="web.html">Login</a>
+
+        </div>
+    </div>
+
+    <div class="left-panel">
+        <button onclick="showOrdersUI()">Your Orders</button>
+    </div>
+
+    <div id="orders" class="orders-container" style="display:none;"></div>
+
+    <script>
+
+        let timers = {};
+
+        function getData() {
+            return JSON.parse(localStorage.getItem("orders")) || [];
+        }
+
+        function showOrdersUI() {
+            let box = document.getElementById("orders");
+            box.style.display = "block";
+            showOrders();
+            startTimers();
+        }
+
+        function showOrders() {
+            let data = getData();
+            let output = "";
+
+            data.forEach((order, index) => {
+                output += `
+            <div class="order-card">
+                <p><b>${order.name}</b></p>
+                <p>₹${order.price}</p>
+                <p>Status: <b class="status ${order.status}">${order.status}</b></p>
+                <p id="timer${index}"></p>
+            </div>
+        `;
+            });
+
+            document.getElementById("orders").innerHTML = output;
+        }
+
+        function startTimers() {
+            let data = getData();
+
+            data.forEach((order, index) => {
+
+                if (order.status === "accepted" && order.time && !timers[index]) {
+                    timers[index] = setInterval(() => {
+                        let now = Date.now();
+                        let elapsed = Math.floor((now - order.time) / 1000);
+                        let duration = order.duration || 300; // 
+                        let remaining = duration - elapsed;
+
+                        let el = document.getElementById("timer" + index);
+                        if (el) {
+                            if (remaining > 0) {
+                                let min = Math.floor(remaining / 60);
+                                let sec = remaining % 60;
+                                el.innerText = `Ready in: ${min}:${sec < 10 ? "0"+sec : sec}`;
+                            } else {
+                                el.innerText = "Waiting for confirmation...";
+                            }
+                        }
+                    }, 1000);
+                }
+
+                if (order.status === "ready" && timers[index]) {
+                    clearInterval(timers[index]);
+                    delete timers[index];
+
+                    let el = document.getElementById("timer" + index);
+                    if (el) {
+                        el.innerText = "Order Ready!";
+                    }
+                }
+            });
+        }
+
+        function checkReady() {
+            let data = getData();
+            let updated = false;
+
+            data.forEach(order => {
+                if (order.status === "ready" && !order.notified) {
+                    alert(" Your order is ready! Please collect it.");
+                    order.notified = true;
+                    updated = true;
+                }
+            });
+
+            if (updated) {
+                localStorage.setItem("orders", JSON.stringify(data));
+            }
+        }
+
+        setInterval(() => {
+            showOrders();
+            startTimers();
+            checkReady();
+        }, 5000);
+
+        showOrders();
+
+    </script>
+
+</body>
+
+</html>

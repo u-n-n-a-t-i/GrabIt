@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+       .profile-box {
+    margin: 80px auto;
+    width: 350px;
+    padding: 25px;
+
+    background: rgba(0,0,0,0.5);
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+
+    transition: all 0.3s ease; } 
+
+    .profile-box:hover {
+        transform: scale(1.05); 
+}
+
+        .profile-box p {
+            margin: 10px 0;
+             display: flex;
+            justify-content: space-between;
+            align-items: center;        
+           /* background: rgba(0,0,0,0.2);*/
+            padding: 10px 20px;
+            backdrop-filter: contrast(0.5);
+  
+        }
+
+        .logout-btn {
+            margin-top: 40px;
+            padding: 10px;
+            width: 100%;
+
+            background:  rgb(78, 188, 198);
+            color: white;
+
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(148, 145, 145,0.5);
+              transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(180, 176, 176, 0.3);
+        }
+        .logout-btn:active {
+    transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+
+
+<div class="nav">
+    <h2>Profile</h2>
+    <div class="navbar-links">
+        <a href="homepage.html">Home</a>
+        <a href="web.html">Login</a>
+        <a href="register.html">New User</a>
+
+    </div>
+</div>
+
+
+<div class="profile-box">
+    <h2>User Profile</h2>
+
+    <p><b>Name:</b> <span id="name"></span></p>
+    <p><b>Email:</b> <span id="email"></span></p>
+    <p><b>Role:</b> <span id="role"></span></p>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<script>
+
+
+let user = JSON.parse(localStorage.getItem("user"));
+
+if(user){
+    document.getElementById("name").innerText = user.username;
+    document.getElementById("email").innerText = user.email;
+    document.getElementById("role").innerText = user.role;
+} else {
+    alert("Please login first");
+    window.location.href = "web.html";
+}
+
+
+function logout(){
+    localStorage.removeItem("user"); // remove login
+
+    alert("Logged out successfully!");
+
+    window.location.href = "web.html"; // go to login
+}
+
+</script>
+
+</body>
+</html>
